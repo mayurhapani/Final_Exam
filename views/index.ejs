@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('./partials/head') %>
+
+  <body>
+    <%- include('./partials/header') %>
+
+    <header class="flex justify-end"></header>
+
+    <div class="bg-zinc-900 min-h-screen w-full p-10">
+      <div class="flex justify-start items-center mb-10">
+        <img
+          class="inline-block h-20 w-20 rounded-full"
+          src="data:image/jpeg;base64,<%= user.image.toString('base64') %>"
+          alt="image"
+        />
+        <h2 class="text-white text-4xl font-bold ms-10">Hello, <%= user.name %> !</h2>
+      </div>
+
+      <div class="mt-20">
+        <h3 class="text-zinc-400 text-xl mb-5">All Products</h3>
+
+        <div class="postcontainer flex flex-wrap">
+          <% myProducts.reverse( ).map(product=>{ %>
+          <div class="product-container p-4 w-1/5">
+            <div class="bg-zinc-300 p-4 rounded-xl">
+              <div class="product-image-container h-64">
+                <img
+                  class="product-image rounded-lg h-full"
+                  src="data:image/jpeg;base64,<%= product.image.toString('base64') %>"
+                />
+              </div>
+
+              <div class="product-name limit-text-to-2-lines mb-3">
+                <p class="font-semibold text-xl"><%= product.proname %></p>
+                <p class="text-sm"><%= product.disc %></p>
+              </div>
+
+              <div class="product-name limit-text-to-2-lines mb-12">
+                <table width="100%" class="text-sm">
+                  <tr>
+                    <td>Seller :</td>
+                    <td><%= user.username %></td>
+                  </tr>
+                  <tr>
+                    <td>Category :</td>
+                    <td><%= product.company.company_name %></td>
+                  </tr>
+                  <tr>
+                    <td>Sub Category :</td>
+                    <td><%= product.company.subCat.subCate_name %></td>
+                  </tr>
+                  <tr>
+                    <td>Company :</td>
+                    <td><%= product.company.subCat.category.cate_name %></td>
+                  </tr>
+                </table>
+              </div>
+
+              <div class="product-price flex justify-between items-center">
+                <div class="">
+                  <span>Price : </span>
+                  <span>$<%= product.price %></span>
+                </div>
+                <div class="">
+                  <span>Discount : </span>
+                  <span>$<%= product.discount %></span>
+                </div>
+              </div>
+
+              <button class="add-to-cart-button button-primary js-add-to-cart-button font-bold">
+                Add to Cart
+              </button>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
