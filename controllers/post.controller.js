@@ -44,11 +44,12 @@ const likePost = async (req, res) => {
     }
 
     await post.save();
-    if (req.query.mypath == "myblogs") {
-      res.redirect("/myblogs");
-    } else {
-      res.redirect("/");
-    }
+    res.redirect("back");
+    // if (req.query.mypath == "myblogs") {
+    //   res.redirect("/myblogs");
+    // } else {
+    //   res.redirect("/");
+    // }
   } catch (error) {
     console.log(error);
   }

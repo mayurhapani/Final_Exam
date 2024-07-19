@@ -132,7 +132,10 @@ const deleteuser = async (req, res) => {
 const adminPanel = async (req, res) => {
   try {
     const user = req.user;
-    const posts = await postModel.find({}).populate("user").populate("comment");
+    const posts = await postModel
+      .find({})
+      .populate("user")
+      .populate({ path: "comment", populate: { path: "user" } });
     console.log(posts);
     res.render("adminPanel", { user, posts });
   } catch (error) {
