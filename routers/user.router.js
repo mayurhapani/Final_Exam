@@ -16,21 +16,25 @@ const {
   allBlogs,
   myblogs,
   deleteuser,
+  adminPanel,
 } = require("../controllers/user.controller");
 
+router.get("/", isLogin, allBlogs);
+router.get("/adminPanel", isLogin, adminPanel);
+
+router.get("/login", login);
+router.post("/login", loginAuth);
 
 router.get("/addUser", addUser);
-router.get("/login", login);
-router.get("/logout", logout);
-router.get("/edituser", isLogin, edituser);
-router.get("/", isLogin, allBlogs);
-router.get("/myblogs", isLogin, myblogs);
-router.get("/deleteUser", isLogin, deleteuser);
-
 router.post("/addUser", imageUpload, userInput, addUserPage);
-router.post("/login", loginAuth);
+
+router.get("/edituser", isLogin, edituser);
 router.post("/editeduser", isLogin, imageUpload, userInput, editUserPage);
 
+router.get("/deleteUser", isLogin, deleteuser);
 
+router.get("/myblogs", isLogin, myblogs);
+
+router.get("/logout", logout);
 
 module.exports = { router };

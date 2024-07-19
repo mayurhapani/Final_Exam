@@ -3,6 +3,7 @@ const userModel = require("../models/user.model");
 const fs = require("fs");
 const path = require("path");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const allBlogs = async (req, res) => {
   try {
@@ -28,7 +29,9 @@ const addUserPage = async (req, res) => {
     if (user)
       return res.status(400).send("User already exist! <br/> Please use other email id......");
 
-    await userModel.create({ name, username, email, password, image });
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await userModel.create({ name, username, email, password: hashedPassword, image });
     res.redirect("/login");
   } catch (err) {
     console.log(err);
@@ -46,12 +49,18 @@ const loginAuth = async (req, res) => {
     const user = await userModel.findOne({ email });
     if (!user) return res.status(400).send("User Not exist!");
 
-    if (password !== user.password) return res.redirect("/login");
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) return res.redirect("/login");
 
     const Token = jwt.sign(user.id, "secret");
     res.cookie("token", Token);
 
-    res.redirect("/");
+    if (user.role == "admin") {
+      res.redirect("/adminPanel");
+    } else {
+      res.redirect("/");
+    }
   } catch (err) {
     console.log(err);
   }
@@ -120,8 +129,20 @@ const deleteuser = async (req, res) => {
   }
 };
 
+const adminPanel = async (req, res) => {
+  try {
+    const user = req.user;
+    const posts = await postModel.find({}).populate("user");
+    // console.log(posts);
+    res.render("adminPanel", { user, posts });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   allBlogs,
+  adminPanel,
   addUser,
   addUserPage,
   login,
