@@ -7,7 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body>
-    <%- include('./partials/header') %>
+    <% if(user.role=="admin"){ %> <%- include('./partials/adminHeader') %> <% }else{ %> <%-
+    include('./partials/header') %> <% } %>
 
     <main class="flex flex-row">
       <%- include('./partials/aside') %>
@@ -50,6 +51,32 @@
                   ><%= new Date(post.date).toLocaleString('en-US', { month: 'short', day: '2-digit',
                   year: 'numeric', hour: '2-digit', minute: '2-digit' }) %></span
                 >
+              </div>
+              <div class="mt-5">
+                <h3 class="text-zinc-400 text-xl mb-5">Comments</h3>
+                <% post.comment.reverse( ).map(comment=>{ %>
+                <div class="flex justify-evenly items-center">
+                  <div class="card border-2 border-zinc-600 rounded-md p-3 mb-2 bg-zinc-800 w-2/3">
+                    <h2 class="text-zinc-300 mb-1 text-lg"><%= comment.comment %></h2>
+                    <div class="flex justify-between items-center mt-3">
+                      <h4 class="text-zinc-500 mb-1 text-sm">@ <%= post.user.name %></h4>
+                      <span class="text-zinc-400 inline-block"
+                        ><%= new Date(comment.date).toLocaleString('en-US', { month: 'short', day:
+                        '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) %></span
+                      >
+                    </div>
+                  </div>
+                  <div class="flex">
+                    <a class="text-zinc-500 me-5" href="/editComment/<%= comment._id %>">Edit</a>
+                    <a
+                      class="text-red-500"
+                      onclick="confirmBlogDelete(event)"
+                      href="/deleteComment/<%= comment._id %>"
+                      >delete</a
+                    >
+                  </div>
+                </div>
+                <% }) %>
               </div>
             </div>
 

@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
 const allBlogs = async (req, res) => {
   try {
     const user = req.user;
-    const posts = await postModel.find({}).populate("user");
+    const posts = await postModel.find({}).populate("user").populate("comment");
     // console.log(posts);
     res.render("index", { user, posts });
   } catch (error) {
@@ -101,7 +101,7 @@ const editUserPage = async (req, res) => {
 const myblogs = async (req, res) => {
   try {
     const user = req.user;
-    const myPosts = await postModel.find({ user: user._id });
+    const myPosts = await postModel.find({ user: user._id }).populate("comment");
 
     res.render("myblogs", { user, myPosts });
   } catch (error) {
@@ -132,8 +132,8 @@ const deleteuser = async (req, res) => {
 const adminPanel = async (req, res) => {
   try {
     const user = req.user;
-    const posts = await postModel.find({}).populate("user");
-    // console.log(posts);
+    const posts = await postModel.find({}).populate("user").populate("comment");
+    console.log(posts);
     res.render("adminPanel", { user, posts });
   } catch (error) {
     console.log(error);

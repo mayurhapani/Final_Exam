@@ -129,6 +129,44 @@ const addComment = async (req, res) => {
   }
 };
 
+const deleteComment = async (req, res) => {
+  try {
+    const Id = req.params.id;
+
+    await commentModel.findByIdAndDelete(Id);
+    res.redirect("/myblogs");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+const editCommentPage = async (req, res) => {
+  try {
+    const Id = req.params.id;
+    const comment = await commentModel.findOne({ _id: Id });
+    console.log(comment);
+    res.render("editComment", { comment });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const editComment = async (req, res) => {
+  try {
+    const Id = req.params.id;
+    await commentModel.findOneAndUpdate(
+      { _id: Id },
+      {
+        comment: req.body.comment,
+      }
+    );
+    res.redirect("/myblogs");
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 module.exports = {
   addComment,
   myPost,
@@ -138,4 +176,7 @@ module.exports = {
   deletePost,
   addPost,
   addPostpage,
+  deleteComment,
+  editCommentPage,
+  editComment,
 };

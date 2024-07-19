@@ -13,6 +13,9 @@ const {
   addPost,
   addPostpage,
   addComment,
+  deleteComment,
+  editCommentPage,
+  editComment,
 } = require("../controllers/post.controller");
 
 postRouter.get("/addPost", isLogin, myPost);
@@ -26,6 +29,10 @@ postRouter.get("/likePost/:id", isLogin, likePost);
 postRouter.get("/editPost/:id", isLogin, editPost);
 postRouter.get("/deletePost/:id", isLogin, deletePost);
 
-postRouter.post("/editPost/:id", isLogin, imageUpload, postInput, editPostPage);
+postRouter.get("/editComment/:id", isLogin, editCommentPage);
+postRouter.post("/editComment/:id", isLogin, editComment);
+postRouter.get("/deleteComment/:id", isLogin, deleteComment);
+
+postRouter.post("/editPost/:id", isLogin, imageUpload, postInput, editCommentPage);
 
 module.exports = { postRouter };
