@@ -2,16 +2,10 @@ const express = require("express");
 const app = express();
 port = 8002;
 
+const cookieParser = require("cookie-parser");
 const db = require("./config/database");
 const { router } = require("./routers/user.router");
-const { proRouter } = require("./routers/product.router");
-const flash = require("connect-flash");
-
-const passport = require("passport");
-const localAuth = require("./middlewares/passport");
-const session = require("express-session");
-
-const cookieParser = require("cookie-parser");
+const { postRouter } = require("./routers/post.router");
 
 app.set("view engine", "ejs");
 
@@ -20,15 +14,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.use(session({ secret: "1234", resave: false, saveUninitialized: false }));
-app.use(passport.initialize());
-app.use(passport.session());
-localAuth(passport);
-
-app.use(flash());
-
 app.use(router);
-app.use("/product", proRouter);
+app.use(postRouter);
 
 app.listen(port, (err) => {
   db();

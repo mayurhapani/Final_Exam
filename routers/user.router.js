@@ -1,79 +1,36 @@
 const { Router } = require("express");
 const router = Router();
 
+const { isLogin } = require("../middlewares/userAuth.middleware");
 const { userInput } = require("../middlewares/userInput.middleware");
-const { imageUpload } = require("../middlewares/fileUpload.middleware");
-const { isAuth } = require("../middlewares/isAuth");
-const { isImage } = require("../middlewares/isImage");
-const { verifyOtpEmail } = require("../middlewares/verifyOptEmail");
-const passport = require("passport");
 
+const { imageUpload } = require("../middlewares/fileUpload.middleware");
 const {
   addUser,
   addUserPage,
-  userOtp,
-  userOptPage,
   login,
+  loginAuth,
+  logout,
   edituser,
   editUserPage,
-  allProducts,
-  myProducts,
+  allBlogs,
+  myblogs,
   deleteuser,
-  changePassword,
-  changePasswordPage,
-  forgetPass,
-  forgetPassPage,
-  otpPage,
-  otpVerification,
-  otpPassword,
 } = require("../controllers/user.controller");
 
-router.get("/", isAuth, allProducts);
 
 router.get("/addUser", addUser);
-router.post("/addUser", imageUpload, isImage, userInput, userOptPage);
-router.get("/addUserOtp", userOtp);
-router.post("/addUserOtp", isImage, addUserPage);
-
 router.get("/login", login);
-router.get("/edituser", isAuth, edituser);
-router.patch("/editeduser", isAuth, imageUpload, editUserPage);
+router.get("/logout", logout);
+router.get("/edituser", isLogin, edituser);
+router.get("/", isLogin, allBlogs);
+router.get("/myblogs", isLogin, myblogs);
+router.get("/deleteUser", isLogin, deleteuser);
 
-router.delete("/deleteUser", isAuth, deleteuser);
+router.post("/addUser", imageUpload, userInput, addUserPage);
+router.post("/login", loginAuth);
+router.post("/editeduser", isLogin, imageUpload, userInput, editUserPage);
 
-router.get("/myProducts", isAuth, myProducts);
 
-router.get("/changePassword", isAuth, changePasswordPage);
-router.post("/changePassword", isAuth, changePassword);
-
-router.get("/forget", forgetPassPage);
-router.post("/forget", forgetPass);
-router.get("/otpVerification", verifyOtpEmail, otpPage);
-router.post("/otpVerification", verifyOtpEmail, otpVerification);
-router.post("/otpPassword", verifyOtpEmail, otpPassword);
-
-router.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/login",
-  })
-);
-
-router.get("/logout", (req, res, next) => {
-  req.logout((err) => {
-    if (err) {
-      return next(err);
-    }
-    req.session.destroy((err) => {
-      if (err) {
-        return next(err);
-      }
-      res.clearCookie("connect.sid");
-      // req.flash("flashMsg", "userLogout");
-      res.redirect("/login");
-    });
-  });
-});
 
 module.exports = { router };

@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('./partials/head') %>
-
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
   <body>
     <%- include('./partials/header') %>
 
@@ -9,70 +13,35 @@
 
     <div class="bg-zinc-900 min-h-screen w-full p-10">
       <div class="flex justify-start items-center mb-10">
-        <img
-          class="inline-block h-20 w-20 rounded-full"
-          src="data:image/jpeg;base64,<%= user.image.toString('base64') %>"
-          alt="image"
-        />
+        <img class="inline-block h-20 w-20 rounded-full" src="/<%= user.image %> " alt="image" />
         <h2 class="text-white text-4xl font-bold ms-10">Hello, <%= user.name %> !</h2>
       </div>
 
       <div class="mt-20">
-        <h3 class="text-zinc-400 text-xl mb-5">All Products</h3>
+        <h3 class="text-zinc-400 text-xl mb-5">All Posts</h3>
 
-        <div class="postcontainer flex flex-wrap">
-          <% myProducts.reverse( ).map(product=>{ %>
-          <div class="product-container p-4 w-1/5">
-            <div class="bg-zinc-300 p-4 rounded-xl">
-              <div class="product-image-container h-64">
-                <img
-                  class="product-image rounded-lg h-full"
-                  src="data:image/jpeg;base64,<%= product.image.toString('base64') %>"
-                />
-              </div>
+        <div class="postcontainer">
+          <% posts.reverse( ).map(post=>{ %>
 
-              <div class="product-name limit-text-to-2-lines mb-3">
-                <p class="font-semibold text-xl"><%= product.proname %></p>
-                <p class="text-sm"><%= product.disc %></p>
-              </div>
-
-              <div class="product-name limit-text-to-2-lines mb-12">
-                <table width="100%" class="text-sm">
-                  <tr>
-                    <td>Seller :</td>
-                    <td><%= user.username %></td>
-                  </tr>
-                  <tr>
-                    <td>Category :</td>
-                    <td><%= product.company.company_name %></td>
-                  </tr>
-                  <tr>
-                    <td>Sub Category :</td>
-                    <td><%= product.company.subCat.subCate_name %></td>
-                  </tr>
-                  <tr>
-                    <td>Company :</td>
-                    <td><%= product.company.subCat.category.cate_name %></td>
-                  </tr>
-                </table>
-              </div>
-
-              <div class="product-price flex justify-between items-center">
-                <div class="">
-                  <span>Price : </span>
-                  <span>$<%= product.price %></span>
-                </div>
-                <div class="">
-                  <span>Discount : </span>
-                  <span>$<%= product.discount %></span>
-                </div>
-              </div>
-
-              <button class="add-to-cart-button button-primary js-add-to-cart-button font-bold">
-                Add to Cart
-              </button>
+          <div class="card border-2 border-zinc-600 rounded-md p-3 mb-2 bg-zinc-800 w-2/3">
+            <img class="inline-block w-full h-80" src="<%= post.image %>" alt="img" />
+            <div class="flex justify-between item-center mt-3">
+              <h2 class="text-zinc-300 mb-1 text-xl">Title : <%= post.title %></h2>
+              <h4 class="text-zinc-500 mb-1 text-sm">@ <%= post.user.name %></h4>
+            </div>
+            <p class="text-zinc-400 text-sm"><%= post.content %></p>
+            <small class="text-white inline-block mt-5 mb-2"> <%= post.likes.length %> likes</small>
+            <div class="flex justify-between items-center">
+              <a class="text-blue-500 me-5" href="/likePost/<%= post._id %>">
+                <%= post.likes.indexOf(user._id )===-1 ? "Like" : "Unlike" %>
+              </a>
+              <span class="text-zinc-400 inline-block"
+                ><%= new Date(post.date).toLocaleString('en-US', { month: 'short', day: '2-digit',
+                year: 'numeric', hour: '2-digit', minute: '2-digit' }) %></span
+              >
             </div>
           </div>
+
           <% }) %>
         </div>
       </div>
