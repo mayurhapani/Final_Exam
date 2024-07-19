@@ -1,4 +1,5 @@
 const userModel = require("../models/user.model");
+const jwt = require("jsonwebtoken");
 
 const isLogin = async (req, res, next) => {
   try {
@@ -9,7 +10,9 @@ const isLogin = async (req, res, next) => {
       return;
     }
     // console.log(req.cookies.token);
-    const user = await userModel.findOne({ _id: req.cookies.token });
+    const token = jwt.verify(req.cookies.token, "secret");
+
+    const user = await userModel.findOne({ _id: token });
     if (user) {
       req.user = user;
       console.log("login successful (by middleware )");

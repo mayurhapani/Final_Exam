@@ -2,6 +2,7 @@ const postModel = require("../models/post.model");
 const userModel = require("../models/user.model");
 const fs = require("fs");
 const path = require("path");
+const jwt = require("jsonwebtoken");
 
 const allBlogs = async (req, res) => {
   try {
@@ -47,8 +48,9 @@ const loginAuth = async (req, res) => {
 
     if (password !== user.password) return res.redirect("/login");
 
-    res.status(200);
-    res.cookie("token", user.id);
+    const Token = jwt.sign(user.id, "secret");
+    res.cookie("token", Token);
+
     res.redirect("/");
   } catch (err) {
     console.log(err);
