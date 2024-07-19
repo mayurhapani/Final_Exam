@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const db = async () => {
   await mongoose.connect(
-    "mongodb+srv://hapanimayur:Love1224@cluster0.iyurgqh.mongodb.net/PRO6Blog"
+    "mongodb+srv://hapanimayur:Love1224@cluster0.iyurgqh.mongodb.net/FinalPro"
   );
   console.log("Database Connected Successfully");
 };

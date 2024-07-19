@@ -12,12 +12,15 @@ const {
   deletePost,
   addPost,
   addPostpage,
+  addComment,
 } = require("../controllers/post.controller");
 
 postRouter.get("/addPost", isLogin, myPost);
 postRouter.get("/addpostpage", isLogin, addPost);
 
 postRouter.post("/addpostpage", isLogin, imageUpload, postInput, addPostpage);
+
+postRouter.post("/addComment/:id", isLogin, addComment);
 
 postRouter.get("/likePost/:id", isLogin, likePost);
 postRouter.get("/editPost/:id", isLogin, editPost);

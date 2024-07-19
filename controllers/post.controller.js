@@ -1,6 +1,7 @@
 const postModel = require("../models/post.model");
 const fs = require("fs");
 const path = require("path");
+const commentModel = require("../models/comment.model");
 
 const myPost = async (req, res) => {
   try {
@@ -77,7 +78,7 @@ const editPostPage = async (req, res) => {
     await postModel.findOneAndUpdate({ _id: req.params.id }, { title, content, image });
     res.redirect("/myblogs");
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
   }
 };
 
@@ -107,4 +108,34 @@ const deletePost = async (req, res) => {
   }
 };
 
-module.exports = { myPost, likePost, editPost, editPostPage, deletePost, addPost, addPostpage };
+const addComment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { comment } = req.body;
+    const user = req.user;
+    const post = await postModel.findOne({ _id: id });
+
+    const newComment = await commentModel.create({
+      user: user._id,
+      comment,
+    });
+
+    console.log(newComment);
+    post.comment.push(newComment._id);
+    await post.save();
+    res.redirect("back");
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+module.exports = {
+  addComment,
+  myPost,
+  likePost,
+  editPost,
+  editPostPage,
+  deletePost,
+  addPost,
+  addPostpage,
+};
